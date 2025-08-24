@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamster Tap - Tap to Earn Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Header with stats -->
+        <header class="game-header">
+            <div class="stats-container">
+                <div class="stat-item">
+                    <i class="fas fa-coins"></i>
+                    <span class="stat-label">Coins</span>
+                    <span class="stat-value" id="coins">0</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-bolt"></i>
+                    <span class="stat-label">Energy</span>
+                    <span class="stat-value" id="energy">1000/1000</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-level-up-alt"></i>
+                    <span class="stat-label">Level</span>
+                    <span class="stat-value" id="level">1</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main game area -->
+        <main class="game-main">
+            <div class="hamster-container">
+                <div class="hamster-card">
+                    <div class="hamster-image" id="hamster">
+                        🐹
+                    </div>
+                    <div class="coins-per-tap">
+                        +<span id="coinsPerTap">1</span> coins per tap
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress bar -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="currentXP">0</span> / <span id="requiredXP">100</span> XP to next level
+                </div>
+            </div>
+
+            <!-- Upgrades section -->
+            <div class="upgrades-section">
+                <h3>Upgrades</h3>
+                <div class="upgrades-grid">
+                    <div class="upgrade-card" id="upgrade-tap">
+                        <div class="upgrade-icon">👆</div>
+                        <div class="upgrade-info">
+                            <div class="upgrade-name">Stronger Tap</div>
+                            <div class="upgrade-description">+1 coins per tap</div>
+                            <div class="upgrade-cost">Cost: <span id="tapUpgradeCost">10</span> coins</div>
+                        </div>
+                    </div>
+                    <div class="upgrade-card" id="upgrade-energy">
+                        <div class="upgrade-icon">⚡</div>
+                        <div class="upgrade-info">
+                            <div class="upgrade-name">More Energy</div>
+                            <div class="upgrade-description">+100 max energy</div>
+                            <div class="upgrade-cost">Cost: <span id="energyUpgradeCost">50</span> coins</div>
+                        </div>
+                    </div>
+                    <div class="upgrade-card" id="upgrade-auto">
+                        <div class="upgrade-icon">🤖</div>
+                        <div class="upgrade-info">
+                            <div class="upgrade-name">Auto Clicker</div>
+                            <div class="upgrade-description">+1 coin per second</div>
+                            <div class="upgrade-cost">Cost: <span id="autoUpgradeCost">100</span> coins</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Achievements -->
+            <div class="achievements-section">
+                <h3>Achievements</h3>
+                <div class="achievements-grid">
+                    <div class="achievement-card unlocked" id="achievement-1">
+                        <div class="achievement-icon">🏆</div>
+                        <div class="achievement-name">First Click</div>
+                        <div class="achievement-description">Click the hamster for the first time</div>
+                    </div>
+                    <div class="achievement-card" id="achievement-2">
+                        <div class="achievement-icon">💯</div>
+                        <div class="achievement-name">Century</div>
+                        <div class="achievement-description">Earn 100 coins</div>
+                    </div>
+                    <div class="achievement-card" id="achievement-3">
+                        <div class="achievement-icon">⚡</div>
+                        <div class="achievement-name">Lightning Fast</div>
+                        <div class="achievement-description">Click 100 times in 10 seconds</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" data-tab="game">
+                <i class="fas fa-gamepad"></i>
+                <span>Game</span>
+            </div>
+            <div class="nav-item" data-tab="leaderboard">
+                <i class="fas fa-trophy"></i>
+                <span>Leaderboard</span>
+            </div>
+            <div class="nav-item" data-tab="shop">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Shop</span>
+            </div>
+            <div class="nav-item" data-tab="profile">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Floating coins animation -->
+    <div class="floating-coins" id="floatingCoins"></div>
+
+    <!-- Sound effects -->
+    <audio id="clickSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhCSql2O/CeSsFJH/N8tiKNwcZZ7vt55hMEAhQp+3wtmQcBj2P1+/PeSwEInbM8N2QQAkUXrTp66hVFApGn+DyvmwhCSql2O/CeSsFJH/N8tiKNwcZZ7vt55hMEAhQp+3wtmQcBj2P1+/PeSwEInbM8N2QQAkUXrTp66hVFApGn+DyvmwhCSql2O/CeSsF" type="audio/wav">
+    </audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
